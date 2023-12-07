@@ -1,40 +1,56 @@
-'''
-Esta version es nada más que de prueba
-'''
-from PIL import Image, ImageDraw,ImageFont
-import barcode
-from barcode import EAN13
-from barcode.writer import ImageWriter
+from PyQt5 import uic
+from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtGui import QTextCharFormat, QFont, QTextCursor
+import sys
 
-data='123456789012'
-file_path="imagenes/imagen_"+data+".png"
+user = ""
 
-ean=EAN13(data,writer=ImageWriter())
+class Window(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi("./imagenes/margoth.ui",self)
 
-ean.save(file_path)
+        self.pushButton_Guardar.clicked.connect(self.save)
+        self.pushButton_Buscar.clicked.connect(self.find)
+        self.pushButton_Cambiar.clicked.connect(self.cambiar_ventana)
 
-'''
-Lluvia de ideas
-Marca
-Unidad de uso
-Ubicación Física
-Lote ¿?
-Fecha Venc.
-Stock Físico = 400
-Stock Actual = 456
-Cantidad de más = 0
-Cantidad de menos = 456-500 = 0
-Cantidad Buena
-Cantidad Mala
+    def cambiar_ventana(self):
+        self.ventana = Cambiar()
+        self.ventana.show()
 
-También se podría mandar a imprimir un reporte. Pero no seas tan cochino aún.
+    def save(self):
+        self.textBrowser.clear()
+        self.textBrowser.append(
+"""Hola
+Como
+Estas""")
 
-Crear el ingreso manual en caso no se pueda ver.
-Y de allí que detectando su nombre y características únicas, que proceda
-a colocar datos como los de arriba de manera manual.
+    def find(self):
+        pass
 
-También debe estar el caso de confirmar o de eliminar.
+class Cambiar(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi("./imagenes/cambiar.ui",self)
 
-Ya si eres sucio, colocas una imagen pequeña para saber cómo es.
+class Inicio(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi("./imagenes/inicio.ui",self)
 
-'''
+        self.pushButton.clicked.connect(self.iniciar)
+    
+    def iniciar(self):
+        global user
+        user = self.lineEdit.text()
+        self.ventana = Window()
+        self.ventana.show()
+
+def main():
+    app = QApplication(sys.argv)
+    window = Inicio()
+    window.show()
+    sys.exit(app.exec_())
+
+if __name__ == '__main__':
+    main()
